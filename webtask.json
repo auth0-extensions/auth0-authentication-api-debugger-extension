@@ -1,0 +1,14 @@
+{
+  "title": "Auth0 Protocol Debugger",
+  "name": "auth0-protocol-debugger-extension",
+  "version": "1.0.0",
+  "author": "auth0",
+  "description": "This extension allows you to easily test various methods of the Auth0 Authentication API.",
+  "type": "application",
+  "repository": "https://github.com/auth0-extensions/auth0-protocol-debugger-extension",
+  "keywords": [
+    "auth0",
+    "extension",
+    "authentication"
+  ]
+}

@@ -1,0 +1,21 @@
+{
+  "name": "auth0-extension",
+  "version": "1.0.0",
+  "description": "My extension for ..",
+  "main": "index.js",
+  "scripts": {
+    "start": "wt-bundle server.js -o ./build/bundle.js && node ./build/bundle.js",
+    "bundle": "wt-bundle webtask.js -o ./build/bundle.js"
+  },
+  "keywords": [
+    "auth0",
+    "extension"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "auth0-oauth2-express": "^1.1.10",
+    "express": "4.14.0",
+    "webtask-tools": "1.2.0"
+  }
+}
