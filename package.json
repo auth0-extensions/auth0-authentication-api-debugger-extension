@@ -16,6 +16,15 @@
   "dependencies": {
     "auth0-oauth2-express": "^1.1.10",
     "express": "4.14.0",
-    "webtask-tools": "1.2.0"
+    "webtask-tools": "^3.1.0",
+    "auth0-extension-express-tools": "^0.6.0",
+    "body-parser": "^1.15.2",
+    "handlebars": "^4.0.5",
+    "jsonwebtoken": "^7.1.9",
+    "lodash": "^4.16.4"
+  },
+  "devDependencies": {
+    "nodemon": "^1.11.0",
+    "webtask-bundle": "^2.1.1"
   }
 }

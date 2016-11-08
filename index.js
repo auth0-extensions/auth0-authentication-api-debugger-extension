@@ -1,44 +1,78 @@
-var express  = require('express');
-var auth0    = require('auth0-oauth2-express');
-var Webtask  = require('webtask-tools');
-var app      = express();
+const path = require('path');
+const crypto = require('crypto');
+const express = require('express')
+const bodyParser = require('body-parser')
+const handlebars = require('handlebars');
+const Webtask = require('webtask-tools');
+const expressTools = require('auth0-extension-express-tools');
 var metadata = require('./webtask.json');
 
-app.use(auth0({
-  scopes: 'read:connections'
-}));
+const utils = require('./lib/utils');
+const index = handlebars.compile(require('./views/index'));
+const partial = handlebars.compile(require('./views/partial'));
 
-app.get('/', function (req, res) {
-  var view = [
-    '<html>',
-    '  <head>',
-    '    <title>Auth0 Extension</title>',
-    '    <script type="text/javascript">',
-    '       if (!sessionStorage.getItem("token")) {',
-    '         window.location.href = "'+res.locals.baseUrl+'/login";',
-    '       }',
-    '    </script>',
-    '  </head>',
-    '  <body>',
-    '    <p><strong>Token</strong></p>',
-    '    <textarea rows="10" cols="100" id="token"></textarea>',
-    '    <script type="text/javascript">',
-    '       var token = sessionStorage.getItem("token");',
-    '       if (token) {',
-    '         document.getElementById("token").innerText = token;',
-    '       }',
-    '    </script>',
-    '  </body>',
-    '</html>'
-  ].join('\n');
+const app = express();
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-  res.header("Content-Type", 'text/html');
-  res.status(200).send(view);
+app.get('/pkce', function(req, res) {
+  const verifier = utils.base64url(crypto.randomBytes(32));
+  return res.json({
+    verifier: verifier,
+    verifier_challenge: utils.base64url(crypto.createHash('sha256').update(verifier).digest())
+  })
 });
 
-// This endpoint would be called by webtask-gallery to dicover your metadata
+app.get('/hash', function(req, res) {
+  res.send(partial({
+    hash: utils.syntaxHighlight(req.query),
+    id_token: utils.jwt(req.query && req.query.id_token),
+    access_token: utils.jwt(req.query && req.query.access_token)
+  }));
+});
+
+app.post('/request', function(req, res) {
+  const request = req.body.request;
+  delete req.body.request;
+  res.send(partial({
+    request: utils.syntaxHighlight(request),
+    response: utils.syntaxHighlight(req.body),
+    id_token: utils.jwt(req.body && req.body.id_token),
+    access_token: utils.jwt(req.body && req.body.access_token)
+  }));
+});
+
 app.get('/meta', function (req, res) {
   res.status(200).send(metadata);
 });
 
-module.exports = app;
+const renderIndex = function(req, res) {
+  try {
+    const headers = req.headers;
+    delete headers['x-wt-params'];
+
+    res.send(index({
+      method: req.method,
+      baseUrl: expressTools.urlHelpers.getBaseUrl(req).replace('http://', 'https://'),
+      headers: utils.syntaxHighlight(req.headers),
+      body: utils.syntaxHighlight(req.body),
+      query: utils.syntaxHighlight(req.query),
+      authorization_code: req.query && req.query.code,
+      samlResponse: utils.samlResponse(req.body && req.body.SAMLResponse),
+      wsFedResult: utils.wsFedResult(req.body && req.body.wresult),
+      id_token: utils.jwt(req.body && req.body.id_token),
+      access_token: utils.jwt(req.body && req.body.access_token)
+    }));
+  } catch (e) {
+    console.log(e);
+    res.json(e);
+  }
+};
+
+app.get('*', renderIndex);
+app.post('*', renderIndex);
+
+module.exports = app; //Webtask.fromExpress(app);
+
+
+
