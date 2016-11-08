@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "wt-bundle server.js -o ./build/bundle.js && node ./build/bundle.js",
-    "bundle": "wt-bundle webtask.js -o ./build/bundle.js"
+    "bundle": "wt-bundle webtask.js -m -o ./build/bundle.js"
   },
   "keywords": [
     "auth0",
