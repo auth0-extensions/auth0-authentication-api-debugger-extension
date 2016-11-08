@@ -21,6 +21,6 @@
     "handlebars": "^4.0.5",
     "jsonwebtoken": "^7.1.9",
     "lodash": "^4.16.4",
-    "webtask-tools": "^3.1.0"
+    "webtask-tools": "1.2.0"
   }
 }
