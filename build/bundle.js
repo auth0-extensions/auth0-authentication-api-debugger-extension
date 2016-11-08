@@ -47,27 +47,23 @@ module.exports =
 
 	'use strict';
 
-	var Webtask = __webpack_require__(1);
+	var App = __webpack_require__(1);
 
-	// This is the entry-point for the Webpack build. We need to convert our module
-	// (which is a simple Express server) into a Webtask-compatible function.
-	module.exports = Webtask.fromExpress(__webpack_require__(2));
+	var port = process.env.PORT || 3000;
+
+	App.listen(port, function () {
+	    console.log('Server started on port', port);
+	});
 
 /***/ },
 /* 1 */
-/***/ function(module, exports) {
-
-	module.exports = require("webtask-tools");
-
-/***/ },
-/* 2 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 
-	var express = __webpack_require__(3);
-	var auth0 = __webpack_require__(4);
-	var Webtask = __webpack_require__(1);
+	var express = __webpack_require__(2);
+	var auth0 = __webpack_require__(3);
+	var Webtask = __webpack_require__(4);
 	var app = express();
 	var metadata = __webpack_require__(5);
 
@@ -90,32 +86,39 @@ module.exports =
 	module.exports = app;
 
 /***/ },
-/* 3 */
+/* 2 */
 /***/ function(module, exports) {
 
 	module.exports = require("express");
 
 /***/ },
-/* 4 */
+/* 3 */
 /***/ function(module, exports) {
 
 	module.exports = require("auth0-oauth2-express");
+
+/***/ },
+/* 4 */
+/***/ function(module, exports) {
+
+	module.exports = require("webtask-tools");
 
 /***/ },
 /* 5 */
 /***/ function(module, exports) {
 
 	module.exports = {
-		"title": "Auth0 Extension Boilerplate",
-		"name": "auth0-extension-boilerplate",
+		"title": "Auth0 Protocol Debugger",
+		"name": "auth0-protocol-debugger-extension",
 		"version": "1.0.0",
 		"author": "auth0",
-		"description": "This is a Hello World extension",
+		"description": "This extension allows you to easily test various methods of the Auth0 Authentication API.",
 		"type": "application",
-		"repository": "https://github.com/auth0/auth0-extension-boilerplate",
+		"repository": "https://github.com/auth0-extensions/auth0-protocol-debugger-extension",
 		"keywords": [
 			"auth0",
-			"extension"
+			"extension",
+			"authentication"
 		]
 	};
 
