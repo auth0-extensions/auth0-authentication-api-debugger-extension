@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "start": "wt-bundle server.js -o ./build/bundle.js && node ./build/bundle.js",
-    "bundle": "wt-bundle webtask.js -o ./build/bundle.js"
+    "bundle": "wt-bundle webtask.js -m -o ./build/bundle.js"
   },
   "keywords": [
     "auth0",
@@ -17,7 +17,8 @@
     "auth0-oauth2-express": "^1.1.10",
     "express": "4.14.0",
     "webtask-tools": "^3.1.0",
-    "auth0-extension-express-tools": "^0.9.0",
+    "auth0-extension-express-tools": "^0.6.0",
+    "auth0-extension-tools": "^0.14.0",
     "body-parser": "^1.15.2",
     "handlebars": "^4.0.5",
     "jsonwebtoken": "^7.1.9",
