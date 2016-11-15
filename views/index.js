@@ -103,7 +103,7 @@ module.exports = `<html lang="en">
                             <form class="form-horizontal col-xs-12">
                               <div class="form-group"><label class="col-xs-2 control-label">Client</label>
                                 <div class="col-xs-10">
-                                  <select class="form-control">
+                                  <select id="client" class="form-control">
                                     {{#each clients}}
                                       {{#unless global}}
                                       <option value="{{client_id}}">{{name}}</option>
@@ -114,18 +114,18 @@ module.exports = `<html lang="en">
                               </div>
                               <div class="form-group"><label class="col-xs-2 control-label">Domain</label>
                                 <div class="col-xs-10">
-                                  <input id="domain" type="text" class="form-control" value="you.auth0.com">
+                                  <input id="domain" readonly type="text" class="form-control" value="{{domain}}">
                                 </div>
                               </div>
                               <div class="form-group"><label class="col-xs-2 control-label">Client ID</label>
                                 <div class="col-xs-10">
-                                  <input id="client_id" type="text" class="form-control" value="">
+                                  <input id="client_id" type="text" class="form-control" value="{{client_id}}">
                                 </div>
                               </div>
                               <div class="form-group">
                                 <label class="col-xs-2 control-label">Client Secret</label>
                                 <div class="col-xs-6">
-                                  <input id="client_secret" type="password" class="form-control" value="">
+                                  <input id="client_secret" type="text" class="form-control" value="{{client_secret}}">
                                   <p class="controls-info">Optional: Not all clients have a secret (eg: Mobile, SPA, Public). Don't store any production secrets here.</p>
                                 </div>
                                 <div class="col-xs-4">
@@ -444,26 +444,40 @@ module.exports = `<html lang="en">
   </div>
 </div>
 <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.3/jquery.js"></script>
+<script src="//cdn.jsdelivr.net/lodash/4.17.0/lodash.min.js"></script>
 <script src="//cdn.auth0.com/w2/auth0-6.js"></script>
 <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.1715/js/bundle.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
+var clients = [ 
+{{#each clients}}
+{
+  client_id: "{{ client_id }}",
+  client_secret: "{{ client_secret }}"
+}
+{{#unless @last}}
+,
+{{/unless}}
+{{/each}}
+];
+
 function read() {
   $('#audience').val(localStorage.getItem('auth_debugger_audience'));
   $('#callback_url').val(window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '') + window.location.pathname);
-  $('#client_id').val(localStorage.getItem('auth_debugger_client_id') || 'IsTxQ7jAYAXL5r5HM4L1RMzsSG0UHeOy');
-  $('#client_secret').val(localStorage.getItem('auth_debugger_client_secret'));
+  $('#client').val(localStorage.getItem('auth_debugger_client'));
+  //$('#client_id').val(localStorage.getItem('auth_debugger_client_id') || 'IsTxQ7jAYAXL5r5HM4L1RMzsSG0UHeOy');
+  //$('#client_secret').val(localStorage.getItem('auth_debugger_client_secret'));
   $('#code_verifier').val(localStorage.getItem('auth_debugger_code_verifier'));
   $('#connection').val(localStorage.getItem('auth_debugger_connection'));
   $('#device').val(localStorage.getItem('auth_debugger_device'));
-  $('#domain').val(localStorage.getItem('auth_debugger_domain') || 'sandrino.auth0.com');
+  //$('#domain').val(localStorage.getItem('auth_debugger_domain') || 'sandrino.auth0.com');
   $('#password').val(localStorage.getItem('auth_debugger_password'));
   $('#delegation_target').val(localStorage.getItem('auth_debugger_delegation_target'));
   $('#prompt').val(localStorage.getItem('auth_debugger_prompt') || '');
   $('#refresh_token').val(localStorage.getItem('auth_debugger_refresh_token'));
   $('#response_mode').val(localStorage.getItem('auth_debugger_response_mode') || '');
   $('#response_type').val(localStorage.getItem('auth_debugger_response_type') || 'token');
-  $('#save_client_secret').prop('checked', localStorage.getItem('auth_debugger_client_secret') && localStorage.getItem('auth_debugger_client_secret').length);
+  //$('#save_client_secret').prop('checked', localStorage.getItem('auth_debugger_client_secret') && localStorage.getItem('auth_debugger_client_secret').length);
   $('#save_password').prop('checked', localStorage.getItem('auth_debugger_password') && localStorage.getItem('auth_debugger_password').length);
   $('#scope').val(localStorage.getItem('auth_debugger_scope') || 'openid name email nickname');
   $('#state').val(localStorage.getItem('auth_debugger_state') || 'my-custom-state');
@@ -480,11 +494,12 @@ function read() {
 }
 function save() {
   localStorage.setItem('auth_debugger_audience', $('#audience').val());
-  localStorage.setItem('auth_debugger_client_id', $('#client_id').val());
-  localStorage.setItem('auth_debugger_client_secret', $('#save_client_secret').is(':checked') ? $('#client_secret').val() : '');
+  localStorage.setItem('auth_debugger_client', $('#client').val());
+  //localStorage.setItem('auth_debugger_client_id', $('#client_id').val());
+  //localStorage.setItem('auth_debugger_client_secret', $('#save_client_secret').is(':checked') ? $('#client_secret').val() : '');
   localStorage.setItem('auth_debugger_code_verifier', $('#code_verifier').val());
   localStorage.setItem('auth_debugger_connection', $('#connection').val());
-  localStorage.setItem('auth_debugger_domain', $('#domain').val());
+  //localStorage.setItem('auth_debugger_domain', $('#domain').val());
   localStorage.setItem('auth_debugger_delegation_target', $('#delegation_target').val());
   localStorage.setItem('auth_debugger_device', $('#device').val());
   localStorage.setItem('auth_debugger_password', $('#save_password').is(':checked') ? $('#save_password').val() : '');
@@ -498,6 +513,17 @@ function save() {
   localStorage.setItem('auth_debugger_use_pkce', $('#use_pkce').is(':checked') ? "1" : "0");
   localStorage.setItem('auth_debugger_use_sso', $('#use_sso').is(':checked') ? "1" : "0");
   localStorage.setItem('auth_debugger_username', $('#username').val());
+}
+function setSelectedClientSecrets() {
+  selectedClient = _.find(clients, { 'client_id': $('#client').val()});
+
+    if (selectedClient) {
+      $('#client_id').val(selectedClient.client_id);
+      $('#client_secret').val(selectedClient.client_secret);
+    } else {
+      $('#client_id').val('');
+      $('#client_secret').val('');
+    }
 }
 function executeRequest(title, url, opt) {
   save();
@@ -550,12 +576,16 @@ if (!window.location.origin) {
 var callbackUrl = window.location.origin + window.location.pathname;
 $(function () {
   read();
+  setSelectedClientSecrets();
   if ("{{method}}" === 'POST' || (window.location.hash && window.location.hash.length > 1) || (window.location.search && window.location.search.length > 1 && window.location.search !== '?webtask_no_cache=1')) {
     $('#tabs a[href="#request"]').tab('show');
   }
   if (window.location.hash && window.location.hash.length > 1) {
     $('#hash_fragment').load(window.location.origin + window.location.pathname + '/hash?' + window.location.hash.replace(/^\#/,""));
   }
+  $('#client').change(function(e) {
+    setSelectedClientSecrets();
+  });
   $('#saml').click(function(e) {
     e.preventDefault();
     save();

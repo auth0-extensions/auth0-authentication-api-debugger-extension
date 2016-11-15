@@ -6,6 +6,7 @@ const handlebars = require('handlebars');
 const Webtask = require('webtask-tools');
 const expressTools = require('auth0-extension-express-tools');
 const nconf = require('nconf');
+var _ = require('lodash');
 
 var metadata = require('./webtask.json');
 var ManagementClient = require('auth0').ManagementClient;
@@ -22,12 +23,6 @@ nconf
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
-
-app.get('/client', function (req, res) {
-  var clients = getClients(function (err, clients) {
-    res.json(clients);
-  });
-});
 
 app.get('/pkce', function (req, res) {
   const verifier = utils.base64url(crypto.randomBytes(32));
@@ -72,12 +67,19 @@ function getClients() {
 const renderIndex = function (req, res) {
   getClients().then(function (clients) {
     try {
+      clients = _.sortBy(clients, function(client) {
+        return client.name;
+      });
+
       const headers = req.headers;
       delete headers['x-wt-params'];
 
       res.send(index({
         method: req.method,
+        domain: nconf.get('AUTH0_DOMAIN'),
         clients: clients,
+        client_id: clients[0].client_id,
+        client_secret: clients[0].client_secret,
         baseUrl: expressTools.urlHelpers.getBaseUrl(req), //.replace('http://', 'https://'),
         headers: utils.syntaxHighlight(req.headers),
         body: utils.syntaxHighlight(req.body),
