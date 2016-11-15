@@ -22,7 +22,8 @@
     "body-parser": "^1.15.2",
     "handlebars": "^4.0.5",
     "jsonwebtoken": "^7.1.9",
-    "lodash": "^4.16.4"
+    "lodash": "^4.16.4",
+    "nconf": "^0.8.4"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",

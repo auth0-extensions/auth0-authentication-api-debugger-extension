@@ -101,6 +101,17 @@ module.exports = `<html lang="en">
                           <div id="configuration" class="tab-pane active">
                             <p>Enter your account settings and additional application settings here (these will be persisted in localstorage).</p>
                             <form class="form-horizontal col-xs-12">
+                              <div class="form-group"><label class="col-xs-2 control-label">Client</label>
+                                <div class="col-xs-10">
+                                  <select class="form-control">
+                                    {{#each clients}}
+                                      {{#unless global}}
+                                      <option value="{{client_id}}">{{name}}</option>
+                                      {{/unless}}
+                                    {{/each}}
+                                  </select>
+                                </div>
+                              </div>
                               <div class="form-group"><label class="col-xs-2 control-label">Domain</label>
                                 <div class="col-xs-10">
                                   <input id="domain" type="text" class="form-control" value="you.auth0.com">
