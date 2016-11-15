@@ -101,6 +101,11 @@ module.exports = `<html lang="en">
                           <div id="configuration" class="tab-pane active">
                             <p>Enter your account settings and additional application settings here (these will be persisted in localstorage).</p>
                             <form class="form-horizontal col-xs-12">
+                              <div class="form-group"><label class="col-xs-2 control-label">Domain</label>
+                                <div class="col-xs-10">
+                                  <input id="domain" readonly type="text" class="form-control" value="{{domain}}">
+                                </div>
+                              </div>
                               <div class="form-group"><label class="col-xs-2 control-label">Client</label>
                                 <div class="col-xs-10">
                                   <select id="client" class="form-control">
@@ -110,29 +115,8 @@ module.exports = `<html lang="en">
                                       {{/unless}}
                                     {{/each}}
                                   </select>
-                                </div>
-                              </div>
-                              <div class="form-group"><label class="col-xs-2 control-label">Domain</label>
-                                <div class="col-xs-10">
-                                  <input id="domain" readonly type="text" class="form-control" value="{{domain}}">
-                                </div>
-                              </div>
-                              <div class="form-group"><label class="col-xs-2 control-label">Client ID</label>
-                                <div class="col-xs-10">
-                                  <input id="client_id" type="text" class="form-control" value="{{client_id}}">
-                                </div>
-                              </div>
-                              <div class="form-group">
-                                <label class="col-xs-2 control-label">Client Secret</label>
-                                <div class="col-xs-6">
-                                  <input id="client_secret" type="text" class="form-control" value="{{client_secret}}">
-                                  <p class="controls-info">Optional: Not all clients have a secret (eg: Mobile, SPA, Public). Don't store any production secrets here.</p>
-                                </div>
-                                <div class="col-xs-4">
-                                  <div class="ui-switch ui-switch-labeled ui-switch-xl">
-                                    <input id="save_client_secret" type="checkbox" />
-                                    <label data-label-true="Save in Local Storage" data-label-false="Don't Save in Local Storage" class="status"></label>
-                                  </div>
+                                  <input id="client_id" type="hidden" class="form-control" value="{{client_id}}">
+                                  <input id="client_secret" type="hidden" class="form-control" value="{{client_secret}}">
                                 </div>
                               </div>
                               <div class="form-group"><label class="col-xs-2 control-label">Callback URL</label>
