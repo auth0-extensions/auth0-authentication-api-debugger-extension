@@ -5,8 +5,8 @@ const bodyParser = require('body-parser')
 const handlebars = require('handlebars');
 const Webtask = require('webtask-tools');
 const expressTools = require('auth0-extension-express-tools');
+const config = require('auth0-extension-tools').config();
 const auth0 = require('auth0-oauth2-express');
-//const nconf = require('nconf');
 var _ = require('lodash');
 
 var metadata = require('./webtask.json');
@@ -16,22 +16,38 @@ const utils = require('./lib/utils');
 const index = handlebars.compile(require('./views/index'));
 const partial = handlebars.compile(require('./views/partial'));
 
-// nconf
-//   .argv()
-//   .env()
-//   .file(path.join(__dirname, './config.json'));
-  
+config.setProvider()
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(require('./middleware/develop.js'));
+
+// app.use(expressTools.managementApiClient({
+//   domain: config('AUTH0_DOMAIN'),
+//   clientId: config('AUTH0_CLIENT_ID'),
+//   clientSecret: config('AUTH0_CLIENT_SECRET')
+// }));
+
 app.use(function (req, res, next) {
   auth0({
-    scopes:              req.webtaskContext.data.AUTH0_SCOPES,
-    clientId:            req.webtaskContext.data.AUTH0_CLIENT_ID,
-    rootTenantAuthority: 'https://' + req.webtaskContext.data.AUTH0_DOMAIN
+    scopes: 'read:clients read:client_keys'
   })(req, res, next)
 });
+
+app.get('/clients', function (req, res) {
+  var token = req.headers.authorization.split(' ')[1];
+
+  var management = new ManagementClient({
+    token: token,
+    domain: req.webtaskContext.data.AUTH0_DOMAIN
+  });
+
+  management.clients.getAll(function (err, clients) {
+    res.json(_.map(clients, function (elm) { return _.pick(elm, 'name', 'client_id', 'client_secret') }));
+  });
+});
+
 
 app.get('/pkce', function (req, res) {
   const verifier = utils.base64url(crypto.randomBytes(32));
@@ -64,14 +80,14 @@ app.get('/meta', function (req, res) {
   res.status(200).send(metadata);
 });
 
-function getClients() {
-  var management = new ManagementClient({
-    token: nconf.get('AUTH0_TOKEN'),
-    domain: nconf.get('AUTH0_DOMAIN')
-  });
+// function getClients() {
+//   var management = new ManagementClient({
+//     token: nconf.get('AUTH0_TOKEN'),
+//     domain: nconf.get('AUTH0_DOMAIN')
+//   });
 
-  return management.clients.getAll();
-}
+//   return management.clients.getAll();
+// }
 
 const renderIndex = function (req, res) {
   // getClients().then(function (clients) {
@@ -105,33 +121,33 @@ const renderIndex = function (req, res) {
   //   }
   // });
 
-    try {
-      var clients = [];
+  try {
+    var clients = [];
 
-      const headers = req.headers;
-      delete headers['x-wt-params'];
+    const headers = req.headers;
+    delete headers['x-wt-params'];
 
-      res.send(index({
-        data: JSON.stringify(req.webtaskContext.data),
-        method: req.method,
-        domain: '',
-        clients: clients,
-        client_id: '', //clients[0].client_id,
-        client_secret: '', //clients[0].client_secret,
-        baseUrl: expressTools.urlHelpers.getBaseUrl(req), //.replace('http://', 'https://'),
-        headers: utils.syntaxHighlight(req.headers),
-        body: utils.syntaxHighlight(req.body),
-        query: utils.syntaxHighlight(req.query),
-        authorization_code: req.query && req.query.code,
-        samlResponse: utils.samlResponse(req.body && req.body.SAMLResponse),
-        wsFedResult: utils.wsFedResult(req.body && req.body.wresult),
-        id_token: utils.jwt(req.body && req.body.id_token),
-        access_token: utils.jwt(req.body && req.body.access_token)
-      }));
-    } catch (e) {
-      console.log(e);
-      res.json(e);
-    }
+    res.send(index({
+      data: JSON.stringify(req.webtaskContext),
+      method: req.method,
+      domain: '',
+      clients: clients,
+      client_id: '', //clients[0].client_id,
+      client_secret: '', //clients[0].client_secret,
+      baseUrl: expressTools.urlHelpers.getBaseUrl(req), //.replace('http://', 'https://'),
+      headers: utils.syntaxHighlight(req.headers),
+      body: utils.syntaxHighlight(req.body),
+      query: utils.syntaxHighlight(req.query),
+      authorization_code: req.query && req.query.code,
+      samlResponse: utils.samlResponse(req.body && req.body.SAMLResponse),
+      wsFedResult: utils.wsFedResult(req.body && req.body.wresult),
+      id_token: utils.jwt(req.body && req.body.id_token),
+      access_token: utils.jwt(req.body && req.body.access_token)
+    }));
+  } catch (e) {
+    console.log(e);
+    res.json(e);
+  }
 
 };
 

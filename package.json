@@ -23,7 +23,9 @@
     "handlebars": "^4.0.5",
     "jsonwebtoken": "^7.1.9",
     "lodash": "^4.16.4",
-    "nconf": "^0.8.4"
+    "nconf": "^0.8.4",
+    "crypto": "^0.0.3",
+    "express-jwt": "^5.1.0"
   },
   "devDependencies": {
     "nodemon": "^1.11.0",
