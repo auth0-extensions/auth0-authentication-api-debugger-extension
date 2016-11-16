@@ -5,6 +5,7 @@ const bodyParser = require('body-parser')
 const handlebars = require('handlebars');
 const Webtask = require('webtask-tools');
 const expressTools = require('auth0-extension-express-tools');
+var auth0 = require('auth0-oauth2-express');
 //const nconf = require('nconf');
 var _ = require('lodash');
 
