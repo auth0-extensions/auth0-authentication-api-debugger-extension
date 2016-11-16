@@ -11,6 +11,7 @@
     "extension"
   ],
   "auth0": {
-    "scopes": "read:clients read:client_keys"
+    "scopes": "read:clients read:client_keys",
+    "createClient": true
   }
 }
