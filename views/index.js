@@ -117,7 +117,6 @@ module.exports = `<html lang="en">
                                   </select>
                                   <input id="client_id" type="hidden" class="form-control" value="{{client_id}}">
                                   <input id="client_secret" type="hidden" class="form-control" value="{{client_secret}}">
-                                  <textarea rows="10" cols="100">{{data}}</textarea>
                                 </div>
                               </div>
                               <div class="form-group"><label class="col-xs-2 control-label">Callback URL</label>
@@ -434,7 +433,6 @@ module.exports = `<html lang="en">
 <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.1715/js/bundle.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
-console.log("extension data", "{{data}}");
 var clients = [ 
 {{#each clients}}
 {
