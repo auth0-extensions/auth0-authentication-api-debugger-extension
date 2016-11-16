@@ -24,6 +24,14 @@ const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
+app.use(function (req, res, next) {
+  auth0({
+    scopes:              req.webtaskContext.data.AUTH0_SCOPES,
+    clientId:            req.webtaskContext.data.AUTH0_CLIENT_ID,
+    rootTenantAuthority: 'https://' + req.webtaskContext.data.AUTH0_DOMAIN
+  })(req, res, next)
+});
+
 app.get('/pkce', function (req, res) {
   const verifier = utils.base64url(crypto.randomBytes(32));
   return res.json({

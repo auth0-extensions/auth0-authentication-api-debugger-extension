@@ -9,5 +9,8 @@
   "keywords": [
     "auth0",
     "extension"
-  ]
+  ],
+  "auth0": {
+    "scopes": "read:clients read:client_keys"
+  }
 }
