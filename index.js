@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const handlebars = require('handlebars');
 const Webtask = require('webtask-tools');
 const expressTools = require('auth0-extension-express-tools');
-const nconf = require('nconf');
+//const nconf = require('nconf');
 var _ = require('lodash');
 
 var metadata = require('./webtask.json');
@@ -15,10 +15,10 @@ const utils = require('./lib/utils');
 const index = handlebars.compile(require('./views/index'));
 const partial = handlebars.compile(require('./views/partial'));
 
-nconf
-  .argv()
-  .env()
-  .file(path.join(__dirname, './config.json'));
+// nconf
+//   .argv()
+//   .env()
+//   .file(path.join(__dirname, './config.json'));
   
 const app = express();
 app.use(bodyParser.json());
@@ -65,21 +65,49 @@ function getClients() {
 }
 
 const renderIndex = function (req, res) {
-  getClients().then(function (clients) {
+  // getClients().then(function (clients) {
+  //   try {
+  //     clients = _.sortBy(clients, function(client) {
+  //       return client.name;
+  //     });
+
+  //     const headers = req.headers;
+  //     delete headers['x-wt-params'];
+
+  //     res.send(index({
+  //       method: req.method,
+  //       domain: nconf.get('AUTH0_DOMAIN'),
+  //       clients: clients,
+  //       client_id: clients[0].client_id,
+  //       client_secret: clients[0].client_secret,
+  //       baseUrl: expressTools.urlHelpers.getBaseUrl(req), //.replace('http://', 'https://'),
+  //       headers: utils.syntaxHighlight(req.headers),
+  //       body: utils.syntaxHighlight(req.body),
+  //       query: utils.syntaxHighlight(req.query),
+  //       authorization_code: req.query && req.query.code,
+  //       samlResponse: utils.samlResponse(req.body && req.body.SAMLResponse),
+  //       wsFedResult: utils.wsFedResult(req.body && req.body.wresult),
+  //       id_token: utils.jwt(req.body && req.body.id_token),
+  //       access_token: utils.jwt(req.body && req.body.access_token)
+  //     }));
+  //   } catch (e) {
+  //     console.log(e);
+  //     res.json(e);
+  //   }
+  // });
+
     try {
-      clients = _.sortBy(clients, function(client) {
-        return client.name;
-      });
+      clients = [];
 
       const headers = req.headers;
       delete headers['x-wt-params'];
 
       res.send(index({
         method: req.method,
-        domain: nconf.get('AUTH0_DOMAIN'),
+        domain: '',
         clients: clients,
-        client_id: clients[0].client_id,
-        client_secret: clients[0].client_secret,
+        client_id: '', //clients[0].client_id,
+        client_secret: '', //clients[0].client_secret,
         baseUrl: expressTools.urlHelpers.getBaseUrl(req), //.replace('http://', 'https://'),
         headers: utils.syntaxHighlight(req.headers),
         body: utils.syntaxHighlight(req.body),
@@ -94,7 +122,7 @@ const renderIndex = function (req, res) {
       console.log(e);
       res.json(e);
     }
-  });
+
 };
 
 app.get('*', renderIndex);
