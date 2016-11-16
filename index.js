@@ -112,7 +112,7 @@ const renderIndex = function (req, res) {
       delete headers['x-wt-params'];
 
       res.send(index({
-        data: req.webtaskContext.data,
+        data: JSON.stringify(req.webtaskContext.data),
         method: req.method,
         domain: '',
         clients: clients,
