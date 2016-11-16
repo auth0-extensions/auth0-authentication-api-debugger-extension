@@ -434,6 +434,7 @@ module.exports = `<html lang="en">
 <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.1715/js/bundle.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
+console.log("extension data", "{{data}}");
 var clients = [ 
 {{#each clients}}
 {
