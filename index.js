@@ -97,7 +97,7 @@ const renderIndex = function (req, res) {
   // });
 
     try {
-      clients = [];
+      var clients = [];
 
       const headers = req.headers;
       delete headers['x-wt-params'];
