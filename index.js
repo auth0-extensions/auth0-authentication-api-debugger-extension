@@ -5,7 +5,7 @@ const bodyParser = require('body-parser')
 const handlebars = require('handlebars');
 const Webtask = require('webtask-tools');
 const expressTools = require('auth0-extension-express-tools');
-var auth0 = require('auth0-oauth2-express');
+const auth0 = require('auth0-oauth2-express');
 //const nconf = require('nconf');
 var _ = require('lodash');
 
@@ -112,6 +112,7 @@ const renderIndex = function (req, res) {
       delete headers['x-wt-params'];
 
       res.send(index({
+        data: req.webtaskContext.data,
         method: req.method,
         domain: '',
         clients: clients,
