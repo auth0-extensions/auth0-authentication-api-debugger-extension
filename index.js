@@ -72,7 +72,7 @@ const renderIndex = function (req, res) {
         clients: clients,
         client_id: '', //clients[0].client_id,
         client_secret: '', //clients[0].client_secret,
-        baseUrl: expressTools.urlHelpers.getBaseUrl(req), //.replace('http://', 'https://'),
+        baseUrl: expressTools.urlHelpers.getBaseUrl(req).replace('http://', 'https://'),
         headers: utils.syntaxHighlight(req.headers),
         body: utils.syntaxHighlight(req.body),
         query: utils.syntaxHighlight(req.query),
