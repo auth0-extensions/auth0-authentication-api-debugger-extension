@@ -43,6 +43,11 @@ module.exports = `<html lang="en">
       color: #EB5424;
     }
   </style>
+  <script type="text/javascript">
+    if (!sessionStorage.getItem("token")) {
+      window.location.href = '{{baseUrl}}/login';
+    }
+  </script>
 </head>
 <body>
 <div id="app">
@@ -109,14 +114,9 @@ module.exports = `<html lang="en">
                               <div class="form-group"><label class="col-xs-2 control-label">Client</label>
                                 <div class="col-xs-10">
                                   <select id="client" class="form-control">
-                                    {{#each clients}}
-                                      {{#unless global}}
-                                      <option value="{{client_id}}">{{name}}</option>
-                                      {{/unless}}
-                                    {{/each}}
                                   </select>
-                                  <input id="client_id" type="hidden" class="form-control" value="{{client_id}}">
-                                  <input id="client_secret" type="hidden" class="form-control" value="{{client_secret}}">
+                                  <input id="client_id" type="text" class="form-control" value="{{client_id}}">
+                                  <input id="client_secret" type="text" class="form-control" value="{{client_secret}}">
                                 </div>
                               </div>
                               <div class="form-group"><label class="col-xs-2 control-label">Callback URL</label>
@@ -433,17 +433,7 @@ module.exports = `<html lang="en">
 <script type="text/javascript" src="//cdn.auth0.com/manage/v0.3.1715/js/bundle.js"></script>
 <script>hljs.initHighlightingOnLoad();</script>
 <script type="text/javascript">
-var clients = [ 
-{{#each clients}}
-{
-  client_id: "{{ client_id }}",
-  client_secret: "{{ client_secret }}"
-}
-{{#unless @last}}
-,
-{{/unless}}
-{{/each}}
-];
+var clients = [];
 
 function read() {
   $('#audience').val(localStorage.getItem('auth_debugger_audience'));
@@ -497,6 +487,14 @@ function save() {
   localStorage.setItem('auth_debugger_use_pkce', $('#use_pkce').is(':checked') ? "1" : "0");
   localStorage.setItem('auth_debugger_use_sso', $('#use_sso').is(':checked') ? "1" : "0");
   localStorage.setItem('auth_debugger_username', $('#username').val());
+}
+function bindClients() {
+  _.each(clients, function(client) {
+    $('#client').append($('<option>', { 
+        value: client.client_id,
+        text : client.name 
+    }));
+  })
 }
 function setSelectedClientSecrets() {
   selectedClient = _.find(clients, { 'client_id': $('#client').val()});
@@ -559,8 +557,20 @@ if (!window.location.origin) {
 }
 var callbackUrl = window.location.origin + window.location.pathname;
 $(function () {
-  read();
-  setSelectedClientSecrets();
+  $.ajax({
+    url: 'https://{{domain}}/api/v2/clients',
+    type: 'GET',
+    headers: {
+      'Authorization': 'Bearer ' + sessionStorage.getItem("token")
+    }}).done(
+      function(data) {
+        clients = _.map(data, function(client) { return _.pick(client, ['client_id', 'client_secret', 'name'] )} );
+
+        bindClients();
+        read();
+        setSelectedClientSecrets();
+    });
+
   if ("{{method}}" === 'POST' || (window.location.hash && window.location.hash.length > 1) || (window.location.search && window.location.search.length > 1 && window.location.search !== '?webtask_no_cache=1')) {
     $('#tabs a[href="#request"]').tab('show');
   }

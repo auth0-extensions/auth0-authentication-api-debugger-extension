@@ -6,6 +6,7 @@ const handlebars = require('handlebars');
 const Webtask = require('webtask-tools');
 const expressTools = require('auth0-extension-express-tools');
 const middlewares = require('auth0-extension-express-tools').middlewares;
+const auth0 = require('auth0-oauth2-express');
 const tools = require('auth0-extension-tools');
 var _ = require('lodash');
 
@@ -21,6 +22,12 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(require('./middleware/develop.js'));
+
+app.use(function (req, res, next) {
+  auth0({
+    scopes: 'read:clients read:client_keys'
+  })(req, res, next)
+});
 
 app.get('/pkce', function (req, res) {
     const verifier = utils.base64url(crypto.randomBytes(32));
@@ -54,46 +61,27 @@ app.get('/meta', function (req, res) {
 });
 
 const renderIndex = function (req, res) {
-    var options = {
+    var clients = [];
+
+    const headers = req.headers;
+    delete headers['x-wt-params'];
+
+    res.send(index({
+        method: req.method,
         domain: req.webtaskContext.data.AUTH0_DOMAIN,
-        clientId: req.webtaskContext.data.AUTH0_CLIENT_ID,
-        clientSecret: req.webtaskContext.data.AUTH0_CLIENT_SECRET
-    };
-
-    tools.managementApi.getClient(options)
-        .then(function (apiClient) {
-            apiClient.clients.getAll(function (err, clients) {
-                try {
-                    clients = _.sortBy(clients, function (client) {
-                        return client.name;
-                    });
-
-                    const headers = req.headers;
-                    delete headers['x-wt-params'];
-
-                    res.send(index({
-                        method: req.method,
-                        domain: req.webtaskContext.data.AUTH0_DOMAIN,
-                        clients: clients,
-                        client_id: clients[0].client_id,
-                        client_secret: clients[0].client_secret,
-                        baseUrl: expressTools.urlHelpers.getBaseUrl(req).replace('http://', 'https://'),
-                        headers: utils.syntaxHighlight(req.headers),
-                        body: utils.syntaxHighlight(req.body),
-                        query: utils.syntaxHighlight(req.query),
-                        authorization_code: req.query && req.query.code,
-                        samlResponse: utils.samlResponse(req.body && req.body.SAMLResponse),
-                        wsFedResult: utils.wsFedResult(req.body && req.body.wresult),
-                        id_token: utils.jwt(req.body && req.body.id_token),
-                        access_token: utils.jwt(req.body && req.body.access_token)
-                    }));
-                } catch (e) {
-                    console.log(e);
-                    res.json(e);
-                }
-
-            })
-        });
+        clients: clients,
+        client_id: '', //clients[0].client_id,
+        client_secret: '', //clients[0].client_secret,
+        baseUrl: expressTools.urlHelpers.getBaseUrl(req), //.replace('http://', 'https://'),
+        headers: utils.syntaxHighlight(req.headers),
+        body: utils.syntaxHighlight(req.body),
+        query: utils.syntaxHighlight(req.query),
+        authorization_code: req.query && req.query.code,
+        samlResponse: utils.samlResponse(req.body && req.body.SAMLResponse),
+        wsFedResult: utils.wsFedResult(req.body && req.body.wresult),
+        id_token: utils.jwt(req.body && req.body.id_token),
+        access_token: utils.jwt(req.body && req.body.access_token)
+    }));
 };
 
 app.get('*', renderIndex);
