@@ -61,17 +61,12 @@ app.get('/meta', function (req, res) {
 });
 
 const renderIndex = function (req, res) {
-    var clients = [];
-
     const headers = req.headers;
     delete headers['x-wt-params'];
 
     res.send(index({
         method: req.method,
         domain: req.webtaskContext.data.AUTH0_DOMAIN,
-        clients: clients,
-        client_id: '', //clients[0].client_id,
-        client_secret: '', //clients[0].client_secret,
         baseUrl: expressTools.urlHelpers.getBaseUrl(req).replace('http://', 'https://'),
         headers: utils.syntaxHighlight(req.headers),
         body: utils.syntaxHighlight(req.body),

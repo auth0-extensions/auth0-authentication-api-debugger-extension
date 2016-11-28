@@ -115,8 +115,8 @@ module.exports = `<html lang="en">
                                 <div class="col-xs-10">
                                   <select id="client" class="form-control">
                                   </select>
-                                  <input id="client_id" type="text" class="form-control" value="{{client_id}}">
-                                  <input id="client_secret" type="text" class="form-control" value="{{client_secret}}">
+                                  <input id="client_id" type="hidden" class="form-control">
+                                  <input id="client_secret" type="hidden" class="form-control">
                                 </div>
                               </div>
                               <div class="form-group"><label class="col-xs-2 control-label">Callback URL</label>
