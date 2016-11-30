@@ -3,8 +3,9 @@
   "name": "auth0-protocol-debugger-extension",
   "version": "1.0.0",
   "author": "auth0",
-  "description": "This is a Hello World extension",
+  "description": "This extension allows you to test the various Authentication API endpoints",
   "type": "application",
+  "logo": "https://cdn.rawgit.com/auth0-extensions/auth0-protocol-debugger-extension/master/assets/logo.svg",
   "repository": "https://github.com/auth0-extensions/auth0-protocol-debugger-extension",
   "keywords": [
     "auth0",
