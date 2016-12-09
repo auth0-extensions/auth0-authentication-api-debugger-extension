@@ -30,7 +30,7 @@ module.exports = function(configProvider, storageProvider) {
     app.use(function(req, res, next) {
         auth0({
             scopes: 'read:clients read:client_keys',
-            audience: 'https://jerrie.auth0.com/api/v2/'
+            audience: 'https://' + config('AUTH0_DOMAIN') + '/api/v2/'
         })(req, res, next)
     });
 
@@ -70,7 +70,6 @@ module.exports = function(configProvider, storageProvider) {
         delete headers['x-wt-params'];
 
         res.send(index({
-            configuration: config('AUTH0_DOMAIN'),
             method: req.method,
             domain: req.webtaskContext.data.AUTH0_DOMAIN,
             baseUrl: expressTools.urlHelpers.getBaseUrl(req).replace('http://', 'https://'),

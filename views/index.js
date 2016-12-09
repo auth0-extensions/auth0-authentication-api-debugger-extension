@@ -87,7 +87,6 @@ module.exports = `<html lang="en">
                 <div id="login" class="tab-pane active">
                   <div class="row">
                     <div class="col-xs-12">
-                      <h2>{{ configuration }}</h2>
                       <div class="alert alert-warning">Rendering (including of hash fragment, client credentials ...) happens on the server, which means that in some cases your tokens might be sent to the webtask hosting this page. You can find the implementation <a href="https://github.com/sandrinodimattia/auth-protocol-debugger">on GitHub</a>.</div>
                     </div>
                     <div class="col-xs-12">
