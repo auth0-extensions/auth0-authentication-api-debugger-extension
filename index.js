@@ -72,7 +72,7 @@ const renderIndex = function (req, res) {
     delete headers['x-wt-params'];
 
     res.send(index({
-        auth0_domain: nconf.get('AUTH0_DOMAIN'),
+        configuration: JSON.stringify(nconf.get()),
         method: req.method,
         domain: req.webtaskContext.data.AUTH0_DOMAIN,
         baseUrl: expressTools.urlHelpers.getBaseUrl(req).replace('http://', 'https://'),
