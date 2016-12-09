@@ -32,7 +32,7 @@ app.use(require('./middleware/develop.js'));
 app.use(function (req, res, next) {
     auth0({
         scopes: 'read:clients read:client_keys',
-        audience: 'https://' + nconf.get('AUTH0_DOMAIN') + '/api/v2'
+        audience: 'https://' + nconf.get('AUTH0_DOMAIN') + '/api/v2/'
     })(req, res, next)
 });
 
