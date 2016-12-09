@@ -1,9 +1,9 @@
 {
-  "title": "Auth0 Protocol Debugger",
-  "name": "auth0-protocol-debugger-extension",
+  "title": "Auth0 Authentication API Debugger",
+  "name": "auth0-authentication-api-debugger-extension",
   "version": "1.0.0",
   "author": "auth0",
-  "description": "This extension allows you to test the various Authentication API endpoints",
+  "description": "This extension allows you to test and debug the various Authentication API endpoints",
   "type": "application",
   "logoUrl": "https://cdn.rawgit.com/auth0-extensions/auth0-protocol-debugger-extension/master/assets/logo.svg",
   "repository": "https://github.com/auth0-extensions/auth0-protocol-debugger-extension",

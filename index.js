@@ -8,6 +8,7 @@ const expressTools = require('auth0-extension-express-tools');
 const middlewares = require('auth0-extension-express-tools').middlewares;
 const auth0 = require('auth0-oauth2-express');
 const tools = require('auth0-extension-tools');
+const nconf = require('nconf');
 var _ = require('lodash');
 
 var metadata = require('./webtask.json');
@@ -17,6 +18,11 @@ const utils = require('./lib/utils');
 const index = handlebars.compile(require('./views/index'));
 const partial = handlebars.compile(require('./views/partial'));
 
+nconf
+    .argv()
+    .env()
+    .file(path.join(__dirname, './config.json'));
+
 const app = express();
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
@@ -24,9 +30,10 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(require('./middleware/develop.js'));
 
 app.use(function (req, res, next) {
-  auth0({
-    scopes: 'read:clients read:client_keys'
-  })(req, res, next)
+    auth0({
+        scopes: 'read:clients read:client_keys',
+        audience: 'https://' + nconf.get('AUTH0_DOMAIN') + '/api/v2'
+    })(req, res, next)
 });
 
 app.get('/pkce', function (req, res) {
