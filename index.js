@@ -32,7 +32,7 @@ app.use(require('./middleware/develop.js'));
 app.use(function (req, res, next) {
     auth0({
         scopes: 'read:clients read:client_keys',
-        audience: 'https://' + nconf.get('AUTH0_DOMAIN') + '/api/v2/'
+        audience: 'https://jerrie.auth0.com/api/v2/'
     })(req, res, next)
 });
 
@@ -72,6 +72,7 @@ const renderIndex = function (req, res) {
     delete headers['x-wt-params'];
 
     res.send(index({
+        auth0_domain: nconf.get('AUTH0_DOMAIN'),
         method: req.method,
         domain: req.webtaskContext.data.AUTH0_DOMAIN,
         baseUrl: expressTools.urlHelpers.getBaseUrl(req).replace('http://', 'https://'),
