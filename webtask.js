@@ -9,6 +9,5 @@ const tools = require('auth0-extension-express-tools');
 const app = require('./index.js');
 
 module.exports = tools.createServer(function(config, storage) {
-  logger.info('Starting Authentication API Debugger Extension - Version:', process.env.CLIENT_VERSION);
   return app(config, storage);
 });
