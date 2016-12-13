@@ -10,11 +10,12 @@ const auth0 = require('auth0-oauth2-express');
 const tools = require('auth0-extension-tools');
 var _ = require('lodash');
 var config = require('auth0-extension-tools').config();
+const dashboardAdmins = require('./middleware/dashboardAdmins.js');
 
 var metadata = require('./webtask.json');
 var ManagementClient = require('auth0').ManagementClient;
 
-module.exports = function(configProvider, storageProvider) {
+module.exports = function (configProvider, storageProvider) {
     const utils = require('./lib/utils');
     const index = handlebars.compile(require('./views/index'));
     const partial = handlebars.compile(require('./views/partial'));
@@ -24,19 +25,30 @@ module.exports = function(configProvider, storageProvider) {
     const app = express();
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
-
+    
     app.use(require('./middleware/develop.js'));
 
-    app.use(function(req, res, next) {
-        auth0({
-            scopes: 'read:clients read:client_keys',
-            audience: function() {
-                return 'https://' + config('AUTH0_DOMAIN') + '/api/v2/';
-            }
-        })(req, res, next)
-    });
+    // const options = {
+    //     credentialsRequired: false,
+    //     scopes: 'create:users read:users read:connections',
+    //     clientName: title,
+    //     audience: function () {
+    //         return 'https://' + config('AUTH0_DOMAIN') + '/api/v2/';
+    //     },
+    //     rootTenantAuthority: config('AUTH0_RTA')
+    // };
+    // app.use(function (req, res, next) {
+    //     auth0({
+    //         scopes: 'read:clients read:client_keys',
+    //         audience: function () {
+                
+    //         },
+    //         rootTenantAuthority: 
+    //     })(req, res, next)
+    // });
+    app.use(dashboardAdmins(config('AUTH0_DOMAIN'), 'Authentication API Debugger Extension', config('AUTH0_RTA')));
 
-    app.get('/pkce', function(req, res) {
+    app.get('/pkce', function (req, res) {
         const verifier = utils.base64url(crypto.randomBytes(32));
         return res.json({
             verifier: verifier,
@@ -44,7 +56,7 @@ module.exports = function(configProvider, storageProvider) {
         })
     });
 
-    app.get('/hash', function(req, res) {
+    app.get('/hash', function (req, res) {
         res.send(partial({
             hash: utils.syntaxHighlight(req.query),
             id_token: utils.jwt(req.query && req.query.id_token),
@@ -52,7 +64,7 @@ module.exports = function(configProvider, storageProvider) {
         }));
     });
 
-    app.post('/request', function(req, res) {
+    app.post('/request', function (req, res) {
         const request = req.body.request;
         delete req.body.request;
         res.send(partial({
@@ -63,11 +75,11 @@ module.exports = function(configProvider, storageProvider) {
         }));
     });
 
-    app.get('/meta', function(req, res) {
+    app.get('/meta', function (req, res) {
         res.status(200).send(metadata);
     });
 
-    const renderIndex = function(req, res) {
+    const renderIndex = function (req, res) {
         const headers = req.headers;
         delete headers['x-wt-params'];
 
