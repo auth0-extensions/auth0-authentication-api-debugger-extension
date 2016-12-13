@@ -91,6 +91,8 @@ module.exports = `<html lang="en">
                     </div>
                     <div class="col-xs-12">
                       <button id="reset_settings" class="btn btn-success">Clear Settings</button>
+                      <h2>{{ auth0_domain }}</h2>
+                      <h2>{{ auth0_rta }}</h2>
                       <p class="controls-info">Hit this button if you want to remove everything from local storage.</p>
                     </div>
                     <div class="col-xs-12" style="margin-top: 25px">

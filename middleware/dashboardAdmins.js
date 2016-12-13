@@ -7,7 +7,7 @@ module.exports = function(domain, title, rta) {
 
   const options = {
     credentialsRequired: false,
-    scopes: 'create:users read:users read:connections',
+    scopes: 'read:clients read:client_keys',
     clientName: title,
     audience: function() {
       return 'https://' + domain + '/api/v2/';
