@@ -30,7 +30,9 @@ module.exports = function(configProvider, storageProvider) {
     app.use(function(req, res, next) {
         auth0({
             scopes: 'read:clients read:client_keys',
-            audience: 'https://' + config('AUTH0_DOMAIN') + '/api/v2/'
+            audience: function() {
+                return 'https://' + config('AUTH0_DOMAIN') + '/api/v2/';
+            }
         })(req, res, next)
     });
 
