@@ -84,8 +84,6 @@ module.exports = function (configProvider, storageProvider) {
         delete headers['x-wt-params'];
 
         res.send(index({
-            auth0_domain: config('AUTH0_DOMAIN'), 
-            auth0_rta: config('AUTH0_RTA'),
             method: req.method,
             domain: req.webtaskContext.data.AUTH0_DOMAIN,
             baseUrl: expressTools.urlHelpers.getBaseUrl(req).replace('http://', 'https://'),
