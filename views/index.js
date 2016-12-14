@@ -61,7 +61,7 @@ module.exports = `<html lang="en">
           <div id="navbar-collapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
               <li><a target="_blank" href="https://auth0.com/support">Help &amp; Support</a></li>
-              <li><a target="_blank" href="https://auth0.com/docs">Documentation</a></li>
+              <!-- <li><a target="_blank" href="https://auth0.com/docs">Documentation</a></li> -->
             </ul>
           </div>
         </div>
@@ -72,7 +72,7 @@ module.exports = `<html lang="en">
         <div class="col-xs-12">
           <div class="row">
             <div class="col-xs-12">
-              <h1 class="pull-left" style="padding-top: 10px;">Protocol Debugger</h1>
+              <h1 class="pull-left" style="padding-top: 10px;">Authentication API Debugger</h1>
             </div>
           </div>
           <div class="row">
@@ -87,7 +87,7 @@ module.exports = `<html lang="en">
                 <div id="login" class="tab-pane active">
                   <div class="row">
                     <div class="col-xs-12">
-                      <div class="alert alert-warning">Rendering (including of hash fragment, client credentials ...) happens on the server, which means that in some cases your tokens might be sent to the webtask hosting this page. You can find the implementation <a href="https://github.com/sandrinodimattia/auth-protocol-debugger">on GitHub</a>.</div>
+                      <div class="alert alert-warning">Please note that this extension retrieves the Client ID and Client Secrets for your Clients using the Management API. This information is subsequently used to call Authentication API endpoints where applicable.</div>
                     </div>
                     <div class="col-xs-12">
                       <button id="reset_settings" class="btn btn-success">Clear Settings</button>

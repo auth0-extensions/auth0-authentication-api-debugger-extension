@@ -1,7 +1,7 @@
 {
   "title": "Auth0 Authentication API Debugger",
   "name": "auth0-authentication-api-debugger-extension",
-  "version": "0.10.0",
+  "version": "0.11.0",
   "author": "auth0",
   "description": "This extension allows you to test and debug the various Authentication API endpoints",
   "type": "application",
