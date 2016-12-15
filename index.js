@@ -6,7 +6,7 @@ const handlebars = require('handlebars');
 const Webtask = require('webtask-tools');
 const expressTools = require('auth0-extension-express-tools');
 const middlewares = require('auth0-extension-express-tools').middlewares;
-const auth0 = require('auth0-oauth2-express');
+const auth0 = require('auth0-oauth2-express@1.2.0');
 const tools = require('auth0-extension-tools');
 var _ = require('lodash');
 var config = require('auth0-extension-tools').config();
@@ -25,7 +25,7 @@ module.exports = function (configProvider, storageProvider) {
     const app = express();
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
-    
+
     app.use(require('./middleware/develop.js'));
 
     // const options = {
@@ -41,9 +41,9 @@ module.exports = function (configProvider, storageProvider) {
     //     auth0({
     //         scopes: 'read:clients read:client_keys',
     //         audience: function () {
-                
+
     //         },
-    //         rootTenantAuthority: 
+    //         rootTenantAuthority:
     //     })(req, res, next)
     // });
     app.use(dashboardAdmins(config('AUTH0_DOMAIN'), 'Authentication API Debugger Extension', config('AUTH0_RTA')));

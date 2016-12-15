@@ -1,5 +1,5 @@
 const url = require('url');
-const auth0 = require('auth0-oauth2-express');
+const auth0 = require('auth0-oauth2-express@1.2.0');
 
 module.exports = function(domain, title, rta) {
   if (!domain) throw new Error('Domain is required');
