@@ -282,6 +282,12 @@ module.exports = `<html lang="en">
                                   <p class="controls-info">You can try something like <strong>consent</strong> or <strong>login</strong></p>
                                 </div>
                               </div>
+                              <div class="form-group"><label class="col-xs-2 control-label">Nonce</label>
+                                <div class="col-xs-10">
+                                  <input id="nonce" type="text" class="form-control" value="">
+                                  <p class="controls-info">Like the OAuth2 state parameter. Required for OIDC Implicit Flow.</p>
+                                </div>
+                              </div>
                             </form>
                           </div>
                           <div id="other-flows" class="tab-pane">
@@ -448,6 +454,7 @@ function read() {
   $('#password').val(localStorage.getItem('auth_debugger_password'));
   $('#delegation_target').val(localStorage.getItem('auth_debugger_delegation_target'));
   $('#prompt').val(localStorage.getItem('auth_debugger_prompt') || '');
+  $('#nonce').val(localStorage.getItem('auth_debugger_nonce') || '');
   $('#refresh_token').val(localStorage.getItem('auth_debugger_refresh_token'));
   $('#response_mode').val(localStorage.getItem('auth_debugger_response_mode') || '');
   $('#response_type').val(localStorage.getItem('auth_debugger_response_type') || 'token');
@@ -478,6 +485,7 @@ function save() {
   localStorage.setItem('auth_debugger_device', $('#device').val());
   localStorage.setItem('auth_debugger_password', $('#save_password').is(':checked') ? $('#save_password').val() : '');
   localStorage.setItem('auth_debugger_prompt', $('#prompt').val());
+  localStorage.setItem('auth_debugger_nonce', $('#nonce').val());
   localStorage.setItem('auth_debugger_refresh_token', $('#refresh_token').val());
   localStorage.setItem('auth_debugger_response_mode', $('#response_mode').val());
   localStorage.setItem('auth_debugger_response_type', $('#response_type').val());
@@ -770,6 +778,9 @@ $(function () {
         }
         if ($('#prompt').val() && $('#prompt').val().length) {
           options.prompt = $('#prompt').val();
+        }
+        if ($('#nonce').val() && $('#nonce').val().length) {
+          options.nonce = $('#nonce').val();
         }
         auth0.login(options);
       });
