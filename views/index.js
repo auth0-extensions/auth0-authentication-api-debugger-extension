@@ -61,7 +61,7 @@ module.exports = `<html lang="en">
           <div id="navbar-collapse" class="collapse navbar-collapse">
             <ul class="nav navbar-nav navbar-right">
               <li><a target="_blank" href="https://auth0.com/support">Help &amp; Support</a></li>
-              <!-- <li><a target="_blank" href="https://auth0.com/docs">Documentation</a></li> -->
+              <li><a target="_blank" href="https://auth0.com/docs/extensions/authentication-api-debugger">Documentation</a></li>
             </ul>
           </div>
         </div>

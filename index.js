@@ -28,24 +28,6 @@ module.exports = function (configProvider, storageProvider) {
 
     app.use(require('./middleware/develop.js'));
 
-    // const options = {
-    //     credentialsRequired: false,
-    //     scopes: 'create:users read:users read:connections',
-    //     clientName: title,
-    //     audience: function () {
-    //         return 'https://' + config('AUTH0_DOMAIN') + '/api/v2/';
-    //     },
-    //     rootTenantAuthority: config('AUTH0_RTA')
-    // };
-    // app.use(function (req, res, next) {
-    //     auth0({
-    //         scopes: 'read:clients read:client_keys',
-    //         audience: function () {
-
-    //         },
-    //         rootTenantAuthority:
-    //     })(req, res, next)
-    // });
     app.use(dashboardAdmins(config('AUTH0_DOMAIN'), 'Authentication API Debugger Extension', config('AUTH0_RTA')));
 
     app.get('/pkce', function (req, res) {
