@@ -1,4 +1,5 @@
 const path = require('path');
+const cors = require('cors');
 const crypto = require('crypto');
 const express = require('express')
 const bodyParser = require('body-parser')
@@ -57,7 +58,7 @@ module.exports = function (configProvider, storageProvider) {
         }));
     });
 
-    app.get('/meta', function (req, res) {
+    app.get('/meta', cors(), function (req, res) {
         res.status(200).send(metadata);
     });
 
