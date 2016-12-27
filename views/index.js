@@ -143,7 +143,7 @@ module.exports = `<html lang="en">
                               <div class="form-group"><label class="col-xs-2 control-label">Connection</label>
                                 <div class="col-xs-10">
                                   <input id="connection" type="text" class="form-control" value="">
-                                  <p class="controls-info">Sprecify the name of a connection to skip the login page (eg: <strong>google-oauth2</strong>).</p>
+                                  <p class="controls-info">Specify the name of a connection to skip the login page (eg: <strong>google-oauth2</strong>).</p>
                                 </div>
                               </div>
                             </form>
