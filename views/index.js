@@ -498,9 +498,9 @@ function save() {
 }
 function bindClients() {
   _.each(clients, function(client) {
-    $('#client').append($('<option>', { 
+    $('#client').append($('<option>', {
         value: client.client_id,
-        text : client.name 
+        text : client.name
     }));
   })
 }
@@ -676,11 +676,15 @@ $(function () {
     e.preventDefault();
     var opt = {
       client_id: $('#client_id').val(),
+      client_secret: $('#client_secret').val(),
       username: $('#username').val(),
       password: $('#password').val(),
       grant_type: 'password',
       scope: $('#scope').val()
     };
+    if ($('#use_audience').is(':checked') && $('#audience').val() && $('#audience').val().length) {
+      opt.audience = $('#audience').val();
+    }
     if ($('#connection').val() && $('#connection').val().length) {
       opt.connection = $('#connection').val();
     }
