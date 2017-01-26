@@ -42,6 +42,9 @@ module.exports = `<html lang="en">
     .json-object .json-string {
       color: #EB5424;
     }
+    #password-grant-from .ui-switch, #password-grant-from .controls-info {
+      margin-top: 0px;
+    }
   </style>
   <script type="text/javascript">
     if (!sessionStorage.getItem("token")) {
@@ -149,7 +152,7 @@ module.exports = `<html lang="en">
                             </form>
                           </div>
                           <div id="oauth2" class="tab-pane">
-                            <div class="alert alert-info">Specification: <a href="https://tools.ietf.org/html/rfc6749#section-1.3.3">OAuth2</a></div>
+                            <div class="alert alert-info">Specification: <a href="https://tools.ietf.org/html/rfc6749#section-1.3.3" target="_blank">OAuth2</a></div>
                             <h5>User Flows</h5>
                             <button id="oidc_oauth2" class="btn btn-primary">OAuth2 / OIDC Login</button>
                             <button id="oauth2_code_exchange" class="btn btn-primary">OAuth2 Code Exchange</button>
@@ -167,12 +170,12 @@ module.exports = `<html lang="en">
                               </div>
                               <div class="form-group">
                                 <label class="col-xs-2 control-label">Password</label>
-                                <div class="col-xs-6">
+                                <div class="col-xs-7">
                                   <input id="password" type="password" class="form-control" value="">
                                   <p class="controls-info">Optional: Only store passwords for test accounts here.</p>
                                 </div>
-                                <div class="col-xs-4">
-                                  <div class="ui-switch ui-switch-labeled ui-switch-xl">
+                                <div class="col-xs-3">
+                                  <div class="pull-right ui-switch ui-switch-labeled ui-switch-xl">
                                     <input id="save_password" type="checkbox" />
                                     <label data-label-true="Save in Local Storage" data-label-false="Don't Save in Local Storage" class="status"></label>
                                   </div>
@@ -185,10 +188,25 @@ module.exports = `<html lang="en">
                                   <p class="controls-info">This field is here for legacy purposes. It's not part of the spec.</p>
                                 </div>
                               </div>
+                              <div class="form-group" id="password-grant-from">
+                                <div class="col-xs-offset-2 col-xs-3">
+                                  <button id="oauth2_password_grant" class="btn btn-primary">Password Grant</button>
+                                </div>
+                                <div class="col-xs-5">
+                                  <div class="ui-switch ui-switch-labeled ui-switch-xl">
+                                    <input id="use_password_realm_support" type="checkbox" />
+                                    <label data-label-true="Disable realm support" data-label-false="Enable realm support" class="status"></label>
+                                  </div>
+                                  <p class="controls-info">Get more info about <a href="https://auth0.com/docs/api-auth/grant/password#realm-support" target="_blank">realm support</a></p>
+                                </div>
+                              </div>
+                              <div class="form-group">
+                                <div class="col-xs-offset-2 col-xs-10">
+                                  <button id="oauth2_ro" class="btn btn-primary">Resource Owner Endpoint</button>
+                                  <p class="controls-info">The Resource Owner Endpoint is here for legacy purposes. It's not part of the spec.</p>
+                                </div>
+                              </div>
                             </form>
-                            <button id="oauth2_password_grant" class="btn btn-primary">Password Grant</button>
-                            <button id="oauth2_ro" class="btn btn-primary">Resource Owner Endpoint</button>
-                            <p class="controls-info">The Resource Owner Endpoint is here for legacy purposes. It's not part of the spec.</p>
                             <h5>Delegation</h5>
                             <p class="controls-info">Not part of the spec - this is here for legacy purposes only.</p>
                             <form class="form-horizontal col-xs-12">
@@ -207,8 +225,12 @@ module.exports = `<html lang="en">
                                   <input id="delegation_target" type="text" class="form-control" value="">
                                 </div>
                               </div>
+                              <div class="form-group">
+                                <div class="col-xs-offset-2 col-xs-10">
+                                    <button id="oauth2_delegation" class="btn btn-primary">Delegation</button>
+                                </div>
+                              </div>
                             </form>
-                            <button id="oauth2_delegation" class="btn btn-primary">Delegation</button>
                             <h5>Settings</h5>
                             <p>The following settings might behave differently if you're using OAuth2 as a Service (Preview)</p>
                             <form class="form-horizontal col-xs-12">
@@ -229,7 +251,7 @@ module.exports = `<html lang="en">
                                   <p class="controls-info">Only required when you need an access token.</p>
                                 </div>
                                 <div class="col-xs-3">
-                                  <div class="ui-switch ui-switch-labeled ui-switch-md">
+                                  <div class="pull-right ui-switch ui-switch-labeled ui-switch-xl">
                                     <input id="use_audience" type="checkbox" />
                                     <label data-label-true="Save in Local Storage" data-label-false="Use Audience" class="status"></label>
                                   </div>
@@ -463,15 +485,11 @@ function read() {
   $('#scope').val(localStorage.getItem('auth_debugger_scope') || 'openid name email nickname');
   $('#state').val(localStorage.getItem('auth_debugger_state') || 'my-custom-state');
   $('#username').val(localStorage.getItem('auth_debugger_username'));
-  if (localStorage.getItem('auth_debugger_use_audience') === "1") {
-    $('#use_audience').prop('checked', 'checked');
-  }
-  if (localStorage.getItem('auth_debugger_use_pkce') === "1") {
-    $('#use_pkce').prop('checked', 'checked');
-  }
-  if (localStorage.getItem('auth_debugger_use_sso') === "1") {
-    $('#use_sso').prop('checked', 'checked');
-  }
+
+  $('#use_audience').prop('checked', (localStorage.getItem('auth_debugger_use_audience') === "1" ? 'checked' : ''));
+  $('#use_pkce').prop('checked', (localStorage.getItem('auth_debugger_use_pkce') === "1" ? 'checked' : ''));
+  $('#use_sso').prop('checked', (localStorage.getItem('auth_debugger_use_sso') === "1" ? 'checked' : ''));
+  $('#use_password_realm_support').prop('checked', (localStorage.getItem('auth_debugger_use_password_realm_support') === "1" ? 'checked' : ''));
 }
 function save() {
   localStorage.setItem('auth_debugger_audience', $('#audience').val());
@@ -483,7 +501,7 @@ function save() {
   //localStorage.setItem('auth_debugger_domain', $('#domain').val());
   localStorage.setItem('auth_debugger_delegation_target', $('#delegation_target').val());
   localStorage.setItem('auth_debugger_device', $('#device').val());
-  localStorage.setItem('auth_debugger_password', $('#save_password').is(':checked') ? $('#save_password').val() : '');
+  localStorage.setItem('auth_debugger_password', $('#save_password').is(':checked') ? $('#password').val() : '');
   localStorage.setItem('auth_debugger_prompt', $('#prompt').val());
   localStorage.setItem('auth_debugger_nonce', $('#nonce').val());
   localStorage.setItem('auth_debugger_refresh_token', $('#refresh_token').val());
@@ -495,6 +513,7 @@ function save() {
   localStorage.setItem('auth_debugger_use_pkce', $('#use_pkce').is(':checked') ? "1" : "0");
   localStorage.setItem('auth_debugger_use_sso', $('#use_sso').is(':checked') ? "1" : "0");
   localStorage.setItem('auth_debugger_username', $('#username').val());
+  localStorage.setItem('auth_debugger_use_password_realm_support', $('#use_password_realm_support').is(':checked') ? "1" : "0");
 }
 function bindClients() {
   _.each(clients, function(client) {
@@ -674,21 +693,28 @@ $(function () {
   });
   $('#oauth2_password_grant').click(function(e) {
     e.preventDefault();
+
+    var realmSupportEnabled = $('#use_password_realm_support').is(':checked');
+
     var opt = {
       client_id: $('#client_id').val(),
       client_secret: $('#client_secret').val(),
       username: $('#username').val(),
       password: $('#password').val(),
-      grant_type: 'password',
+      grant_type: realmSupportEnabled ? 'http://auth0.com/oauth/grant-type/password-realm' : 'password',
       scope: $('#scope').val()
     };
+
     if ($('#use_audience').is(':checked') && $('#audience').val() && $('#audience').val().length) {
       opt.audience = $('#audience').val();
     }
-    if ($('#connection').val() && $('#connection').val().length) {
-      opt.connection = $('#connection').val();
+
+    if (realmSupportEnabled) {
+      opt.realm = $('#connection').val();
     }
-    executeRequest('OAuth2 - Password Grant', 'https://' + $('#domain').val() + '/oauth/token', opt);
+
+    var title = 'OAuth2 - Password Grant' + (realmSupportEnabled ? ' - Realm' : '');
+    executeRequest(title, 'https://' + $('#domain').val() + '/oauth/token', opt);
   });
   $('#oauth2_ro').click(function(e) {
     e.preventDefault();
