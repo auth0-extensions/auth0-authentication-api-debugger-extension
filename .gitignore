@@ -31,4 +31,7 @@ node_modules
 
 .DS_Store
 
+#IDE
+.idea
+
 npm-debug.log

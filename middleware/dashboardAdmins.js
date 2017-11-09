@@ -18,7 +18,14 @@ module.exports = function(domain, title, rta) {
   const middleware = auth0(options);
   return function(req, res, next) {
     const protocol = 'https';
-    const pathname = url.parse(req.originalUrl).pathname.replace(req.path, '');
+    const pathname = (req.x_wt)
+      ? url.parse(req.originalUrl).pathname
+        .replace(req.x_wt.container, 'req.x_wt.container')
+        .replace(req.path, '')
+        .replace('req.x_wt.container', req.x_wt.container)
+      : url.parse(req.originalUrl).pathname
+        .replace(req.path, '');
+
     const baseUrl = url.format({
       protocol: protocol,
       host: req.get('host'),
