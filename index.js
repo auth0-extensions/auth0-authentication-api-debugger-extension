@@ -1,20 +1,13 @@
-const path = require('path');
 const cors = require('cors');
 const crypto = require('crypto');
-const express = require('express')
-const bodyParser = require('body-parser')
+const express = require('express');
+const bodyParser = require('body-parser');
 const handlebars = require('handlebars');
-const Webtask = require('webtask-tools');
 const expressTools = require('auth0-extension-express-tools');
-const middlewares = require('auth0-extension-express-tools').middlewares;
-const auth0 = require('auth0-oauth2-express@1.2.0');
-const tools = require('auth0-extension-tools');
-var _ = require('lodash');
 var config = require('auth0-extension-tools').config();
 const dashboardAdmins = require('./middleware/dashboardAdmins.js');
 
 var metadata = require('./webtask.json');
-var ManagementClient = require('auth0').ManagementClient;
 
 module.exports = function (configProvider, storageProvider) {
     const utils = require('./lib/utils');
