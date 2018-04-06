@@ -87,7 +87,7 @@ module.exports = `<html lang="en">
                 <div id="login" class="tab-pane active">
                   <div class="row">
                     <div class="col-xs-12">
-                      <div class="alert alert-warning">Please note that this extension retrieves the Client ID and Client Secrets for your Clients using the Management API. This information is subsequently used to call Authentication API endpoints where applicable.</div>
+                      <div class="alert alert-warning">Please note that this extension retrieves the Client ID and Client Secrets for your Applications using the Management API. This information is subsequently used to call Authentication API endpoints where applicable.</div>
                     </div>
                     <div class="col-xs-12">
                       <button id="reset_settings" class="btn btn-success">Clear Settings</button>
@@ -111,7 +111,7 @@ module.exports = `<html lang="en">
                                   <input id="domain" readonly type="text" class="form-control" value="{{domain}}">
                                 </div>
                               </div>
-                              <div class="form-group"><label class="col-xs-2 control-label">Client</label>
+                              <div class="form-group"><label class="col-xs-2 control-label">Application</label>
                                 <div class="col-xs-10">
                                   <select id="client" class="form-control">
                                   </select>
@@ -122,7 +122,7 @@ module.exports = `<html lang="en">
                               <div class="form-group"><label class="col-xs-2 control-label">Callback URL</label>
                                 <div class="col-xs-10">
                                   <input id="callback_url" readonly type="text" class="form-control" value="">
-                                  <p class="controls-info">Make sure you configure this as the Callback Url on your client.</p>
+                                  <p class="controls-info">Make sure you configure this as the Callback Url on your application.</p>
                                 </div>
                               </div>
                               <div class="form-group">
@@ -219,7 +219,7 @@ module.exports = `<html lang="en">
                                     <input id="use_pkce" type="checkbox"/>
                                     <label class="status"></label>
                                   </div>
-                                  <p class="controls-info">The PKCE (Proof Key for Code Exchange by OAuth Public Clients) or Hybrid Flow is a better alternative to the implicit flow for Mobile Apps. In Auth0, make sure you set the client type to "Native".</p>
+                                  <p class="controls-info">The PKCE (Proof Key for Code Exchange by OAuth Public Clients) or Hybrid Flow is a better alternative to the implicit flow for Mobile Apps. In Auth0, make sure you set the application type to "Native".</p>
                                 </div>
                               </div>
                               <div class="form-group">
@@ -498,9 +498,9 @@ function save() {
 }
 function bindClients() {
   _.each(clients, function(client) {
-    $('#client').append($('<option>', { 
+    $('#client').append($('<option>', {
         value: client.client_id,
-        text : client.name 
+        text : client.name
     }));
   })
 }

@@ -3,7 +3,7 @@ const auth0 = require('auth0-oauth2-express@1.2.0');
 
 module.exports = function(domain, title, rta) {
   if (!domain) throw new Error('Domain is required');
-  if (!title) throw new Error('title is required');
+  if (!title) throw new Error('Title is required');
 
   const options = {
     credentialsRequired: false,
