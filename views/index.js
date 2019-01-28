@@ -604,7 +604,7 @@ $(function () {
     var url = 'https://' + $('#domain').val() + '/wsfed/' + $('#client_id').val() + '?wctx=' + encodeURIComponent($('#state').val());
     url = url + '&wreply=' + encodeURIComponent(callbackUrl);
     if ($('#connection').val() && $('#connection').val().length) {
-      url = url + '&wtrealm=' + encodeURIComponent($('#connection').val());
+      url = url + '&whr=' + encodeURIComponent($('#connection').val());
     }
     window.location.href = url;
   });
