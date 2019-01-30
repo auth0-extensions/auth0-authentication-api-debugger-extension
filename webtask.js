@@ -1,13 +1,20 @@
-var Webtask = require('webtask-tools');
-
-// This is the entry-point for the Webpack build. We need to convert our module
-// (which is a simple Express server) into a Webtask-compatible function.
-module.exports = Webtask.fromExpress(require('./index.js'));
-
 const tools = require('auth0-extension-express-tools');
 
-const app = require('./index.js');
+const expressApp = require('./server');
+const config = require('./server/lib/config');
+const logger = require('./server/lib/logger');
 
-module.exports = tools.createServer(function(config, storage) {
-  return app(config, storage);
+const createServer = tools.createServer((cfg, storage) => {
+  logger.info('Starting Auth0 Authentication API Debugger - Version:', process.env.CLIENT_VERSION);
+  return expressApp(cfg, storage);
 });
+
+
+module.exports = (context, req, res) => {
+  const publicUrl = (req.x_wt && req.x_wt.ectx && req.x_wt.ectx.PUBLIC_WT_URL) || false;
+  if (!publicUrl) {
+    config.setValue('PUBLIC_WT_URL', tools.urlHelpers.getWebtaskUrl(req));
+  }
+
+  createServer(context, req, res);
+};
