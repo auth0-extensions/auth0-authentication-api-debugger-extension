@@ -3,11 +3,12 @@ const crypto = require('crypto');
 const Express = require('express');
 const bodyParser = require('body-parser');
 const handlebars = require('handlebars');
-const { middlewares, routes, urlHelpers } = require('auth0-extension-express-tools');
+const { urlHelpers } = require('auth0-extension-express-tools');
 
 const config = require('./lib/config');
 const utils = require('./lib/utils');
 const metadata = require('../webtask.json');
+const dashboardAdmins = require('./middleware/dashboardAdmins');
 
 module.exports = (configProvider) => {
     config.setProvider(configProvider);
@@ -16,30 +17,13 @@ module.exports = (configProvider) => {
     const partial = handlebars.compile(require('./views/partial'));
     const app = new Express();
 
-    const adminsOnly = middlewares.authenticateAdmins({
-      credentialsRequired: true,
-      secret: config('EXTENSION_SECRET'),
-      audience: 'urn:authentication-api-debugger',
-      baseUrl: config('PUBLIC_WT_URL'),
-      onLoginSuccess: (req, res, next) => {
-        next();
-      }
-    });
 
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: false }));
 
-    app.use(routes.dashboardAdmins({
-      secret: config('EXTENSION_SECRET'),
-      audience: 'urn:authentication-api-debugger',
-      rta: config('AUTH0_RTA').replace('https://', ''),
-      domain: config('AUTH0_DOMAIN'),
-      baseUrl: config('PUBLIC_WT_URL'),
-      clientName: `Auth0 Authentication API Debugger`,
-      sessionStorageKey: 'auth-api-debugger:apiToken',
-    }));
+    app.use(dashboardAdmins(config('AUTH0_DOMAIN'), 'Authentication API Debugger Extension', config('AUTH0_RTA')));
 
-    app.get('/pkce', adminsOnly, function (req, res) {
+    app.get('/pkce', function (req, res) {
         const verifier = utils.base64url(crypto.randomBytes(32));
         return res.json({
             verifier: verifier,
@@ -47,7 +31,7 @@ module.exports = (configProvider) => {
         })
     });
 
-    app.get('/hash', adminsOnly, function (req, res) {
+    app.get('/hash', function (req, res) {
         res.send(partial({
             hash: utils.syntaxHighlight(req.query),
             id_token: utils.jwt(req.query && req.query.id_token),
@@ -55,7 +39,7 @@ module.exports = (configProvider) => {
         }));
     });
 
-    app.post('/request', adminsOnly, function (req, res) {
+    app.post('/request', function (req, res) {
         const request = req.body.request;
         delete req.body.request;
         res.send(partial({

@@ -44,7 +44,7 @@ module.exports = `<html lang="en">
     }
   </style>
   <script type="text/javascript">
-    if (!sessionStorage.getItem("auth-api-debugger:apiToken")) {
+    if (!sessionStorage.getItem("token")) {
       window.location.href = '{{baseUrl}}/login';
     }
   </script>
@@ -569,7 +569,7 @@ $(function () {
     url: 'https://{{domain}}/api/v2/clients',
     type: 'GET',
     headers: {
-      'Authorization': 'Bearer ' + sessionStorage.getItem("auth-api-debugger:apiToken")
+      'Authorization': 'Bearer ' + sessionStorage.getItem("token")
     }}).done(
       function(data) {
         clients = _.map(data, function(client) { return _.pick(client, ['client_id', 'client_secret', 'name'] )} );
