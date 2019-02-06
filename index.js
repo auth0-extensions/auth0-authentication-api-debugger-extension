@@ -36,10 +36,7 @@ nconf
     HOSTING_ENV: 'default',
     PORT: 3000,
     AUTH0_RTA: 'auth0.auth0.com',
-    AUTH0_DOMAIN: 'xan-test3.eu.auth0.com',
-    EXTENSION_SECRET: 'secret',
-    WT_URL: 'http://localhost:3000',
-    PUBLIC_WT_URL: 'https://49ddb5d2.ngrok.io'
+    EXTENSION_SECRET: 'secret'
   });
 
 // Start the server.
