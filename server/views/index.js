@@ -577,6 +577,12 @@ $(function () {
         bindClients();
         read();
         setSelectedClientSecrets();
+    }).fail(function(err) {
+      if (err.status === 401 || err.status === 403) {
+        sessionStorage.removeItem('token');
+        sessionStorage.removeItem('apiToken');
+        window.location.href = '/login';
+      }
     });
 
   if ("{{method}}" === 'POST' || (window.location.hash && window.location.hash.length > 1) || (window.location.search && window.location.search.length > 1 && window.location.search !== '?webtask_no_cache=1')) {
