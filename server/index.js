@@ -9,6 +9,7 @@ const config = require('./lib/config');
 const utils = require('./lib/utils');
 const metadata = require('../webtask.json');
 const dashboardAdmins = require('./middleware/dashboardAdmins');
+const AuthenticationClient = require('auth0').AuthenticationClient;
 
 module.exports = (configProvider) => {
     config.setProvider(configProvider);
@@ -48,6 +49,45 @@ module.exports = (configProvider) => {
             id_token: utils.jwt(req.body && req.body.id_token),
             access_token: utils.jwt(req.body && req.body.access_token)
         }));
+    });
+
+    app.post('/request/code', function(req, res) {
+        const data = { 
+          code: req.body.code,
+          redirect_uri: req.body.redirect_uri 
+        };
+        const auth0 = new AuthenticationClient({
+          domain: config('AUTH0_DOMAIN'),
+          clientId: req.body.client_id,
+          clientSecret: req.body.client_secret,
+          __bypassIdTokenValidation: true
+        });
+    
+        auth0.oauth.authorizationCodeGrant(data, function (err, response) {
+          if (err) {
+            const data = utils.tryParseJSON(err.message);
+            return res.status(err.statusCode).json(data);
+          }
+          res.json(response);
+        });
+      });
+    
+    app.post('/request/token', function(req, res) {
+        const auth0 = new AuthenticationClient({
+            domain: config('AUTH0_DOMAIN'),
+            clientId: req.body.client_id,
+            clientSecret: req.body.client_secret,
+            __bypassIdTokenValidation: true
+        });
+
+        const data = { refresh_token: req.body.refresh_token };
+        auth0.oauth.refreshToken(data, function (err, response) {
+            if (err) {
+                const data = utils.tryParseJSON(err.message);
+                return res.status(err.statusCode).json(data);
+            }
+            res.json(response);
+        });
     });
 
     app.get('/meta', cors(), function (req, res) {
