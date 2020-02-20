@@ -117,3 +117,11 @@ module.exports.syntaxHighlight = function(obj) {
     return JSON.stringify(obj, null, 2);
   }
 }
+
+module.exports.tryParseJSON = function(string) {
+  try {
+    return JSON.parse(string);
+  } catch (e) {
+    return;
+  }
+}
