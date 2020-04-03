@@ -700,7 +700,7 @@ $(function () {
     } else {
       opt.client_secret = $('#client_secret').val();
     }
-    executeRequest('OAuth2 - Authorization Code Exchange', 'https://' + $('#domain').val() + '/oauth/token', opt);
+    executeCodeExchange('OAuth2 - Authorization Code Exchange', opt);
   });
   $('#oauth2_refresh_token_exchange').click(function(e) {
     e.preventDefault();
@@ -717,7 +717,7 @@ $(function () {
     } else {
       opt.client_secret = $('#client_secret').val();
     }
-    executeRequest('OAuth2 - Refresh Token Exchange', 'https://' + $('#domain').val() + '/oauth/token', opt);
+    executeTokenExchange('OAuth2 - Refresh Token Exchange', opt);
   });
   $('#oauth2_password_grant').click(function(e) {
     e.preventDefault();

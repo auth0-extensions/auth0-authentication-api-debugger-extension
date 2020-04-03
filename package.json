@@ -1,6 +1,6 @@
 {
   "name": "auth0-authentication-api-debugger-extension",
-  "version": "2.0.3",
+  "version": "2.1.0",
   "description": "My extension for ..",
   "main": "index.js",
   "scripts": {
