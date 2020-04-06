@@ -7,7 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.1.0] - 2020-04-03
 
 ### Changed
-- Refresh Token Exchanged and Authorization Code exchange will be performed via the backend server.
+- Refresh Token Exchange and Authorization Code exchange will be performed via the backend server.
 
 ## [2.0.2] - 2019-06-13
 
