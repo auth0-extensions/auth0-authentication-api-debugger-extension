@@ -1650,20 +1650,6 @@ auth0-oauth2-express@1.2.0:
     jsonwebtoken "^5.0.1"
     superagent "^1.2.0"
 
-auth0@2.23.0:
-  version "2.23.0"
-  resolved "https://a0us.jfrog.io/a0us/api/npm/npm/auth0/-/auth0-2.23.0.tgz#62de27c1d19a692bcf689274e98019d7286e529f"
-  integrity sha1-Yt4nwdGaaSvPaJJ06YAZ1yhuUp8=
-  dependencies:
-    bluebird "^3.5.5"
-    jsonwebtoken "^8.5.1"
-    jwks-rsa "^1.7.0"
-    lru-memoizer "^2.1.0"
-    object.assign "^4.1.0"
-    request "^2.88.0"
-    rest-facade "^1.12.0"
-    retry "^0.12.0"
-
 auth0@^2.23.0:
   version "2.24.0"
   resolved "https://a0us.jfrog.io/a0us/api/npm/npm/auth0/-/auth0-2.24.0.tgz#529ee36d46d2119624b04532b1ac4635a0de0de9"
