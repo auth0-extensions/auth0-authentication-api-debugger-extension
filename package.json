@@ -46,7 +46,7 @@
     "express-jwt": "^5.1.0",
     "handlebars": "^4.0.5",
     "jsonwebtoken": "^7.1.9",
-    "lodash": "^4.16.4",
+    "lodash": "^4.17.13",
     "nconf": "^0.8.4",
     "webtask-tools": "^3.1.0",
     "winston": "^2.2.0"
