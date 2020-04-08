@@ -515,50 +515,91 @@ function setSelectedClientSecrets() {
       $('#client_secret').val('');
     }
 }
+function setSelectedClientSecrets() {
+  selectedClient = _.find(clients, { 'client_id': $('#client').val() });
+
+  if (selectedClient) {
+    $('#client_id').val(selectedClient.client_id);
+    $('#client_secret').val(selectedClient.client_secret);
+  } else {
+    $('#client_id').val('');
+    $('#client_secret').val('');
+  }
+}
+function handleSuccessRequest(url, opt, data) {
+  data.request = opt;
+  if (data.refresh_token) {
+    $('#refresh_token').val(data.refresh_token);
+  }
+  if (data.request.password) {
+    data.request.password = '*****************';
+  }
+  if (data.request.client_secret) {
+    data.request.client_secret = '*****************';
+  }
+  $.ajax({ type: "POST", url: '{{baseUrl}}/request', data: JSON.stringify(data), contentType: 'application/json' })
+    .done(function (data) {
+      $('#modal-body').html(data);
+      $('#modal-body').prepend($('<pre/>', { 'class': 'json-object', 'html': 'POST ' + url }));
+    })
+    .fail(function (err) {
+      $('#modal-body').html('<p>Error decoding the response.</p>');
+      $('<pre/>', { 'class': 'json-object', 'html': err.responseText || err.name || err.text || err.body || err.status }).appendTo('#modal-body');
+    });
+}
+function handleErrorRequest(url, opt, err) {
+  if (opt.password) {
+    opt.password = '*****************';
+  }
+  if (opt.client_secret) {
+    opt.client_secret = '*****************';
+  }
+  $.ajax({ type: "POST", url: '{{baseUrl}}/request', data: JSON.stringify({ request: opt, err: err }), contentType: 'application/json' })
+    .done(function (data) {
+      $('#modal-body').html(data);
+      $('#modal-body').prepend($('<pre/>', { 'class': 'json-object', 'html': 'POST ' + url }));
+    })
+    .fail(function (err) {
+      $('#modal-body').html('<p>Error decoding the response.</p>');
+      $('<pre/>', { 'class': 'json-object', 'html': err.responseText || err.name || err.text || err.body || err.status }).appendTo('#modal-body');
+    });
+}
 function executeRequest(title, url, opt) {
   save();
   $('#modal-title').html(title);
   $('#modal-body').html('Loading...');
   $('#modal-dialog').modal({ show: true });
   $.post(url, opt)
-    .done(function(data) {
-      data.request = opt;
-      if (data.refresh_token) {
-        localStorage.setItem('auth_debugger_refresh_token', data.refresh_token);
-      }
-      if (data.request.password) {
-        data.request.password = '*****************';
-      }
-      if (data.request.client_secret) {
-        data.request.client_secret = '*****************';
-      }
-      $.ajax({ type: "POST", url: '{{baseUrl}}/request', data: JSON.stringify(data), contentType: 'application/json' })
-        .done(function(data) {
-          $('#modal-body').html(data);
-          $('#modal-body').prepend($('<pre/>', { 'class':'json-object', 'html': 'POST ' + url }));
-        })
-        .fail(function(err) {
-          $('#modal-body').html('<p>Error decoding the response.</p>');
-          $('<pre/>', { 'class':'json-object', 'html': err.responseText || err.name || err.text || err.body || err.status }).appendTo('#modal-body');
-        });
+    .done(function (data) {
+      handleSuccessRequest(url, opt, data);
     })
-    .fail(function(err) {
-      if (opt.password) {
-        opt.password = '*****************';
-      }
-      if (opt.client_secret) {
-        opt.client_secret = '*****************';
-      }
-      $.ajax({ type: "POST", url: '{{baseUrl}}/request', data: JSON.stringify({ request: opt, err: err }), contentType: 'application/json' })
-        .done(function(data) {
-          $('#modal-body').html(data);
-          $('#modal-body').prepend($('<pre/>', { 'class':'json-object', 'html': 'POST ' + url }));
-        })
-        .fail(function(err) {
-          $('#modal-body').html('<p>Error decoding the response.</p>');
-          $('<pre/>', { 'class':'json-object', 'html': err.responseText || err.name || err.text || err.body || err.status }).appendTo('#modal-body');
-        });
+    .fail(function (err) {
+      handleErrorRequest(url, opt, err);
     });
+}
+function executeBackendRequest(title, url, backendUrl, opt) {
+  save();
+  $('#modal-title').html(title);
+  $('#modal-body').html('Loading...');
+  $('#modal-dialog').modal({ show: true });
+  $.post(backendUrl, opt)
+    .done(function (data) {
+      data.request = opt;
+      handleSuccessRequest(url, opt, data);
+    })
+    .fail(function (err) {
+      handleErrorRequest(url, opt, err);
+    });
+}
+function executeTokenExchange(title, opt) {
+  var url =  'https://' + $('#domain').val() + '/oauth/token';
+  var backendUrl = '{{baseUrl}}/request/token';
+  executeBackendRequest(title, url, backendUrl, opt);
+}
+function executeCodeExchange(title, opt) {
+  var url =  'https://' + $('#domain').val() + '/oauth/token';
+  var backendUrl = '{{baseUrl}}/request/code';
+  executeBackendRequest(title, url, backendUrl, opt);
 }
 if (!window.location.origin) {
   window.location.origin = window.location.protocol + "//" + window.location.hostname + (window.location.port ? ':' + window.location.port : '');
@@ -659,7 +700,7 @@ $(function () {
     } else {
       opt.client_secret = $('#client_secret').val();
     }
-    executeRequest('OAuth2 - Authorization Code Exchange', 'https://' + $('#domain').val() + '/oauth/token', opt);
+    executeCodeExchange('OAuth2 - Authorization Code Exchange', opt);
   });
   $('#oauth2_refresh_token_exchange').click(function(e) {
     e.preventDefault();
@@ -676,7 +717,7 @@ $(function () {
     } else {
       opt.client_secret = $('#client_secret').val();
     }
-    executeRequest('OAuth2 - Refresh Token Exchange', 'https://' + $('#domain').val() + '/oauth/token', opt);
+    executeTokenExchange('OAuth2 - Refresh Token Exchange', opt);
   });
   $('#oauth2_password_grant').click(function(e) {
     e.preventDefault();
