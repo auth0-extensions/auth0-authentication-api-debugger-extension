@@ -80,7 +80,7 @@ module.exports = (configProvider) => {
             __bypassIdTokenValidation: true
         });
 
-        const data = { refresh_token: req.body.refresh_token };
+        const data = { refresh_token: req.body.refresh_token, client_secret: req.body.client_secret };
         auth0.oauth.refreshToken(data, function (err, response) {
             if (err) {
                 const data = utils.tryParseJSON(err.message);
