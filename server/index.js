@@ -54,7 +54,8 @@ module.exports = (configProvider) => {
     app.post('/request/code', function(req, res) {
         const data = {
           code: req.body.code,
-          redirect_uri: req.body.redirect_uri
+          redirect_uri: req.body.redirect_uri,
+          code_verifier: req.body.code_verifier
         };
         const auth0 = new AuthenticationClient({
           domain: config('AUTH0_DOMAIN'),
