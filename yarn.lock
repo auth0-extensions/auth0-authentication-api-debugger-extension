@@ -3564,13 +3564,14 @@ express-jwt@^3.1.0:
     jsonwebtoken "^5.0.0"
     lodash.set "^4.0.0"
 
-express-jwt@^5.1.0:
-  version "5.1.0"
-  resolved "https://registry.yarnpkg.com/express-jwt/-/express-jwt-5.1.0.tgz#a1c5e3381bc78d2de4d3c51133421c69e004d581"
+express-jwt@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/express-jwt/-/express-jwt-6.0.0.tgz#20886c730983ffb1c706a4383235df86eff349b8"
+  integrity sha512-C26y9myRjx7CyhZ+BAT3p+gQyRCoDZ7qo8plCvLDaRT6je6ALIAQknT6XLVQGFKwIy/Ux7lvM2MNap5dt0T7gA==
   dependencies:
     async "^1.5.0"
     express-unless "^0.3.0"
-    jsonwebtoken "~6.2.0"
+    jsonwebtoken "^8.1.0"
     lodash.set "^4.0.0"
 
 express-unless@^0.3.0:
@@ -5146,7 +5147,7 @@ jodid25519@^1.0.0:
   dependencies:
     jsbn "~0.1.0"
 
-joi@^6.10.1, joi@~6.10.1:
+joi@^6.10.1:
   version "6.10.1"
   resolved "https://registry.yarnpkg.com/joi/-/joi-6.10.1.tgz#4d50c318079122000fe5f16af1ff8e1917b77e06"
   dependencies:
@@ -5253,7 +5254,7 @@ jsonwebtoken@^7.1.9:
     ms "^0.7.1"
     xtend "^4.0.1"
 
-jsonwebtoken@^8.3.0, jsonwebtoken@^8.5.1:
+jsonwebtoken@^8.1.0, jsonwebtoken@^8.3.0, jsonwebtoken@^8.5.1:
   version "8.5.1"
   resolved "https://a0us.jfrog.io/a0us/api/npm/npm/jsonwebtoken/-/jsonwebtoken-8.5.1.tgz#00e71e0b8df54c2121a1f26137df2280673bcc0d"
   integrity sha1-AOceC431TCEhofJhN98igGc7zA0=
@@ -5268,15 +5269,6 @@ jsonwebtoken@^8.3.0, jsonwebtoken@^8.5.1:
     lodash.once "^4.0.0"
     ms "^2.1.1"
     semver "^5.6.0"
-
-jsonwebtoken@~6.2.0:
-  version "6.2.0"
-  resolved "https://registry.yarnpkg.com/jsonwebtoken/-/jsonwebtoken-6.2.0.tgz#8233154c6cd9fd8760ad0f5a563f539dd391f2f9"
-  dependencies:
-    joi "~6.10.1"
-    jws "^3.0.0"
-    ms "^0.7.1"
-    xtend "^4.0.1"
 
 jsprim@^1.2.2:
   version "1.3.1"
