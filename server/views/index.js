@@ -606,25 +606,36 @@ if (!window.location.origin) {
 }
 var callbackUrl = window.location.origin + window.location.pathname;
 $(function () {
-  $.ajax({
-    url: 'https://{{domain}}/api/v2/clients',
-    type: 'GET',
-    headers: {
-      'Authorization': 'Bearer ' + sessionStorage.getItem("token")
-    }}).done(
-      function(data) {
-        clients = _.map(data, function(client) { return _.pick(client, ['client_id', 'client_secret', 'name'] )} );
+  function fetchAllClients(page, results) {
+    page = page || 0;
+    results = results || [];
 
-        bindClients();
-        read();
-        setSelectedClientSecrets();
-    }).fail(function(err) {
-      if (err.status === 401 || err.status === 403) {
-        sessionStorage.removeItem('token');
-        sessionStorage.removeItem('apiToken');
-        window.location.href = '/login';
-      }
-    });
+    var perPage = 100;
+    $.ajax({
+      url: 'https://{{domain}}/api/v2/clients?page=' + page + '&per_page=' + perPage,
+      type: 'GET',
+      headers: {
+        'Authorization': 'Bearer ' + sessionStorage.getItem("token")
+      }}).done(
+        function(data) {
+          results = results.concat(data || []);
+          if (data && data.length === perPage) {
+            fetchAllClients(page + 1, results);
+          } else {
+            clients = _.map(results, function(client) { return _.pick(client, ['client_id', 'client_secret', 'name'] )} );
+            bindClients();
+            read();
+            setSelectedClientSecrets();
+          }
+      }).fail(function(err) {
+        if (err.status === 401 || err.status === 403) {
+          sessionStorage.removeItem('token');
+          sessionStorage.removeItem('apiToken');
+          window.location.href = '/login';
+        }
+      });
+  }
+  fetchAllClients();
 
   if ("{{method}}" === 'POST' || (window.location.hash && window.location.hash.length > 1) || (window.location.search && window.location.search.length > 1 && window.location.search !== '?webtask_no_cache=1')) {
     $('#tabs a[href="#request"]').tab('show');
