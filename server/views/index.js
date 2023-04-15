@@ -734,6 +734,7 @@ $(function () {
     e.preventDefault();
     var opt = {
       client_id: $('#client_id').val(),
+      client_secret: $('#client_secret').val(),
       username: $('#username').val(),
       password: $('#password').val(),
       grant_type: 'password',
