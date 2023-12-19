@@ -43,12 +43,12 @@
     "cors": "2.8.1",
     "crypto": "^0.0.3",
     "express": "4.14.0",
-    "express-jwt": "^5.1.0",
+    "express-jwt": "^5.3.1",
     "handlebars": "^4.0.5",
-    "jsonwebtoken": "^7.1.9",
+    "jsonwebtoken": "^8.0.0",
     "lodash": "^4.16.4",
     "nconf": "^0.8.4",
-    "webtask-tools": "^3.1.0",
+    "webtask-tools": "^3.4.1",
     "winston": "^2.2.0"
   },
   "devDependencies": {
