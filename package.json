@@ -48,7 +48,7 @@
     "jsonwebtoken": "^7.1.9",
     "lodash": "^4.16.4",
     "nconf": "^0.8.4",
-    "webtask-tools": "^3.1.0",
+    "webtask-tools": "^3.4.1",
     "winston": "^2.2.0"
   },
   "devDependencies": {
