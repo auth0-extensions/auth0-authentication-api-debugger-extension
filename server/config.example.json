@@ -1,0 +1,5 @@
+{
+  "AUTH0_DOMAIN": "me.auth0.com",
+  "AUTH0_RTA": "https://auth0.auth0.com",
+  "PORT": 3000
+}
